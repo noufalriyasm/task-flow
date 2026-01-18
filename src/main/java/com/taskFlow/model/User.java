@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 public class User implements UserDetails {
     @Id
-    private String Id;
+    private ObjectId Id;
     private ObjectId companyId;
     private ObjectId departmentId;
     private String name;
@@ -45,7 +45,12 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return this.loginId;
+    }
+
+    @Override
+    public String getPassword(){
+        return this.password;
     }
 
     @Override

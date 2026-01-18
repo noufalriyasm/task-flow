@@ -26,5 +26,6 @@ public class UserRepository {
 
   public User saveUser(final  User user){
     return mongoTemplate.save(user);
+
   }
 }

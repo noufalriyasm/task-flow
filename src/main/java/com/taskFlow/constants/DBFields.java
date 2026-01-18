@@ -7,5 +7,6 @@ public interface DBFields {
   String IS_REMOVED = "isRemoved";
   String DEPARTMENT_ID="departmentId";
   String USER_TYPE="userType";
+  String CREATED_BY="createdBy";
 
 }
