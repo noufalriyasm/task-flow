@@ -45,10 +45,16 @@ public class AuthServiceImpl implements AuthService {
     assert loggedInUser != null;
     final String jwtToken = jwtUtil.generateToken(loggedInUser);
 
-    Department userDepartment =
-        departmentRepository.findDepartmentById(
-            loggedInUser.getCompanyId().toHexString(), loggedInUser.getDepartmentId().toHexString());
-    Company userCompany = companyRepository.findCompanyById(loggedInUser.getCompanyId().toHexString());
+    Department userDepartment=null;
+    Company userCompany=null;
+    if(loggedInUser.getCompanyId() != null){
+      userCompany = companyRepository.findCompanyById(loggedInUser.getCompanyId().toHexString());
+    }
+    if(loggedInUser.getCompanyId() != null && loggedInUser.getDepartmentId() != null){
+      userDepartment =
+              departmentRepository.findDepartmentById(
+                      loggedInUser.getCompanyId().toHexString(), loggedInUser.getDepartmentId().toHexString());
+    }
 
     CommonIdNameResponse departmentResponse = null;
     CommonIdNameResponse companyResponse = null;
@@ -63,14 +69,14 @@ public class AuthServiceImpl implements AuthService {
     if (userCompany != null) {
       companyResponse =
           CommonIdNameResponse.builder()
-              .id(userCompany.getId())
+              .id(userCompany.getId().toHexString())
               .name(userCompany.getName())
               .build();
     }
     return LoginResponse.builder()
         .status(1)
         .message(Messages.LOGGED_IN_SUCCESSFULLY)
-        .id(loggedInUser.getId())
+        .id(loggedInUser.getId().toHexString())
         .name(loggedInUser.getName())
         .email(loggedInUser.getEmail())
         .token(jwtToken)
@@ -99,16 +105,16 @@ public class AuthServiceImpl implements AuthService {
     user.setPassword(encodedPassword);
     User savedUser = userRepository.saveUser(user);
 
-    savedUser.setLastUpdatedBy(new ObjectId(savedUser.getId()));
-    savedUser.setCreatedBy(new ObjectId(savedUser.getId()));
+    savedUser.setLastUpdatedBy((savedUser.getId()));
+    savedUser.setCreatedBy((savedUser.getId()));
 
     userRepository.saveUser(savedUser);
 
     return SignupResponse.builder()
         .status(1)
-        .id(savedUser.getId())
+        .id(savedUser.getId().toHexString())
         .name(savedUser.getName())
-        .message(Messages.USER_CREATED_SUCCESSFULLY)
+        .message(String.format(Messages.CREATED_SUCCESSFULLY,"User"))
         .build();
   }
 }
