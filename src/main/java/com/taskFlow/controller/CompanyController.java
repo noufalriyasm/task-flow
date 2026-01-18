@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/api/task-flow/company/")
 public class CompanyController {
-    //adding qa branch
+    //adding complete authentication
 }
